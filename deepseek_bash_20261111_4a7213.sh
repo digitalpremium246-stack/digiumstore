@@ -1,0 +1,1 @@
+npm install @upstash/ratelimit @upstash/redis

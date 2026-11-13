@@ -1,0 +1,114 @@
+// prisma/schema.prisma (V2)
+
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "postgresql" url = env("DATABASE_URL") }
+
+// --- 1. IDENTITY & ACCESS ---
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  name          String?
+  password      String?
+  role          Role      @default(CUSTOMER)
+  createdAt     DateTime  @default(now())
+  
+  orders        Order[]
+  tryOnJobs     VirtualTryOnJob[]
+  consents      UserConsent[]
+  auditLogs     AuditLog[]
+}
+
+enum Role {
+  CUSTOMER
+  SUPER_ADMIN
+  STORE_ADMIN
+  FINANCE
+  CS
+}
+
+model UserConsent {
+  id        String   @id @default(uuid())
+  userId    String
+  type      String   // "AI_TRYON_PROCESSING"
+  agreedAt  DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+// --- 2. PRODUCT & INVENTORY ---
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  price       Decimal  @db.Decimal(12, 2)
+  images      String[]
+  categoryId  String
+  variants    ProductVariant[]
+  createdAt   DateTime @default(now())
+}
+
+model ProductVariant {
+  id          String   @id @default(uuid())
+  productId   String
+  sku         String   @unique
+  size        String
+  color       String
+  onHandStock Int      @default(0) // Fisik
+  reservedStock Int    @default(0) // Dikunci saat checkout
+  product     Product  @relation(fields: [productId], references: [id])
+}
+
+// --- 3. COMMERCE & ORDERS ---
+model Order {
+  id              String   @id @default(uuid())
+  userId          String?
+  totalAmount     Decimal  @db.Decimal(12, 2)
+  status          OrderStatus @default(PENDING)
+  midtransOrderId String?  @unique
+  createdAt       DateTime @default(now())
+  items           OrderItem[]
+  user            User?    @relation(fields: [userId], references: [id])
+}
+
+enum OrderStatus { PENDING PAID SHIPPED COMPLETED CANCELLED }
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  productId String
+  name      String  // Snapshot
+  price     Decimal @db.Decimal(12, 2) // Snapshot
+  quantity  Int
+}
+
+// --- 4. AI & PRIVACY ---
+model VirtualTryOnJob {
+  id             String   @id @default(uuid())
+  userId         String?
+  productId      String
+  status         JobStatus @default(CREATED)
+  provider       String
+  resultImageUrl String?
+  createdAt      DateTime @default(now())
+  user           User?    @relation(fields: [userId], references: [id])
+}
+
+enum JobStatus { CREATED QUEUED PROCESSING COMPLETED FAILED EXPIRED }
+
+model AIUsageLog {
+  id             String   @id @default(uuid())
+  provider       String
+  requestType    String   // "TRYON", "STYLIST"
+  costEstimate   Decimal  @db.Decimal(10, 4)
+  createdAt      DateTime @default(now())
+}
+
+// --- 5. AUDIT ---
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  action    String
+  entity    String
+  entityId  String
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id])
+}

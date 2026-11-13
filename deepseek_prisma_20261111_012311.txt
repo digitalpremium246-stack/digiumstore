@@ -1,0 +1,51 @@
+// prisma/schema.prisma
+
+model Category {
+  id        String    @id @default(uuid())
+  name      String
+  slug      String    @unique
+  products  Product[]
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  description String
+  price       Decimal  @db.Decimal(10, 2)
+  images      String[]
+  categoryId  String
+  isFeatured  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  category    Category @relation(fields: [categoryId], references: [id])
+  variants    ProductVariant[]
+}
+
+model ProductVariant {
+  id        String   @id @default(uuid())
+  productId String
+  size      String
+  color     String
+  stock     Int      @default(0)
+  sku       String   @unique
+
+  product   Product  @relation(fields: [productId], references: [id])
+}
+
+model Cart {
+  id        String     @id @default(uuid())
+  userId    String?    // Nullable jika guest cart, tapi kita gunakan local storage dulu
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+}
+
+model CartItem {
+  id        String  @id @default(uuid())
+  cartId    String
+  variantId String
+  quantity  Int     @default(1)
+  
+  cart      Cart    @relation(fields: [cartId], references: [id])
+  variant   ProductVariant @relation(fields: [variantId], references: [id])
+}

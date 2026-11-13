@@ -1,0 +1,42 @@
+digiumstore/
+├── prisma/
+│   └── schema.prisma         <-- (Ambil dari Phase 2 & 6)
+├── public/
+│   ├── models/avatar.glb     <-- (Opsional: Unduh dari internet)
+│   └── hero-model.jpg        <-- (Opsional: Gambar hero)
+├── src/
+│   ├── app/
+│   │   ├── (admin)/
+│   │   │   ├── layout.tsx    <-- (Ambil dari Phase 6)
+│   │   │   └── admin/
+│   │   │       ├── page.tsx  <-- (Ambil dari Phase 6)
+│   │   │       └── products/page.tsx <-- (Ambil dari Phase 6)
+│   │   ├── actions/
+│   │   │   ├── admin.actions.ts <-- (Ambil dari Phase 6)
+│   │   │   └── product.actions.ts <-- (Ambil dari Phase 2)
+│   │   ├── api/
+│   │   │   ├── checkout/route.ts <-- (Ambil dari Phase 6)
+│   │   │   ├── stylist/route.ts  <-- (Ambil dari Phase 5)
+│   │   │   ├── try-on/route.ts   <-- (Ambil dari Phase 3)
+│   │   │   └── webhook/midtrans/route.ts <-- (Ambil dari Phase 6)
+│   │   ├── 3d-studio/page.tsx    <-- (Ambil dari Phase 4)
+│   │   ├── checkout/page.tsx     <-- (Ambil dari Phase 6)
+│   │   ├── product/[slug]/page.tsx <-- (Ambil dari Phase 2)
+│   │   ├── shop/page.tsx         <-- (Ambil dari Phase 2)
+│   │   ├── stylist/page.tsx      <-- (Ambil dari Phase 5)
+│   │   ├── try-on/page.tsx       <-- (Ambil dari Phase 3)
+│   │   ├── layout.tsx            <-- (Standard Next.js layout)
+│   │   └── page.tsx              <-- (Ambil dari Phase 1)
+│   ├── components/
+│   │   └── 3d/Avatar.tsx         <-- (Ambil dari Phase 4)
+│   ├── lib/
+│   │   ├── ai/provider.ts        <-- (Ambil dari Phase 3)
+│   │   ├── rate-limit.ts         <-- (Ambil dari Phase 7)
+│   │   └── storage.ts            <-- (Ambil dari Phase 3)
+│   └── store/
+│       └── useCartStore.ts       <-- (Ambil dari Phase 2)
+├── .env.example                  <-- (Ambil dari Phase 7)
+├── Dockerfile                    <-- (Ambil dari Phase 7)
+├── next.config.mjs               <-- (Ambil dari Phase 7)
+├── package.json                  <-- (Gunakan dari script di atas)
+└── tailwind.config.ts            <-- (Gunakan dari script di atas)

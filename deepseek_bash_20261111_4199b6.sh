@@ -1,0 +1,1 @@
+npm install -D vitest @testing-library/react @playwright/test

@@ -1,0 +1,11 @@
+model VirtualTryOnJob {
+  id           String    @id @default(uuid())
+  userId       String?   // Optional for now
+  productId    String
+  userImageUrl String
+  status       String    @default("PENDING") // PENDING, PROCESSING, COMPLETED, FAILED
+  resultImageUrl String?
+  errorMessage String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
