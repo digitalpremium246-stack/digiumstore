@@ -1,0 +1,35 @@
+// --- LANJUTAN SCHEMA V2 (Phase 9) ---
+
+// 1. MANAJEMEN KONTEN & VIDEO PROMOSI
+model PromoContent {
+  id          String   @id @default(uuid())
+  title       String
+  type        String   // "VIDEO", "BANNER"
+  mediaUrl    String   // URL ke Cloudflare R2 (MP4/JPG/PNG)
+  linkUrl     String?  // URL tujuan saat diklik (misal: ke halaman promo)
+  placement   String   // "HOMEPAGE_HERO", "PRODUCT_SIDEBAR", "CHECKOUT_TOP"
+  isActive    Boolean  @default(true)
+  startDate   DateTime?
+  endDate     DateTime?
+  advertiserId String? // Null jika milik Digium sendiri
+  advertiser  Advertiser? @relation(fields: [advertiserId], references: [id])
+  clicks      Int      @default(0)
+  impressions Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+// 2. MANAJEMEN PEMASANG IKLAN (Third-Party Advertisers)
+model Advertiser {
+  id          String   @id @default(uuid())
+  companyName String
+  contactEmail String
+  status      String   @default("ACTIVE") // "ACTIVE", "PAUSED", "BANNED"
+  createdAt   DateTime @default(now())
+  contents    PromoContent[]
+}
+
+// 3. IKLAN PRODUK (Sponsored Products)
+// Kita tidak membuat tabel baru, tapi menambahkan flag di tabel Product
+// (Tambahkan field ini ke model Product yang sudah ada)
+// isSponsored Boolean @default(false)
+// advertiserId String? 

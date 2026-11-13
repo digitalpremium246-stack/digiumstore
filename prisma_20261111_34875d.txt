@@ -1,0 +1,46 @@
+// --- LANJUTAN SCHEMA V2 ---
+
+// 1. SUBSCRIPTION & BILLING
+model SubscriptionPlan {
+  id          String   @id @default(uuid())
+  name        String   // e.g., "Free", "Pro Stylist", "Enterprise"
+  price       Decimal  @db.Decimal(10, 2)
+  tryOnCredits Int     // Jumlah Try-On per bulan
+  aiChatLimit  Int     // Batas chat per bulan
+  features    Json     // List fitur
+  users       UserSubscription[]
+}
+
+model UserSubscription {
+  id           String   @id @default(uuid())
+  userId       String   @unique
+  planId       String
+  status       String   // "ACTIVE", "CANCELLED", "EXPIRED"
+  tryOnCredits Int      @default(0) // Sisa kuota bulan ini
+  aiChatUsed   Int      @default(0)
+  validUntil   DateTime
+  user         User     @relation(fields: [userId], references: [id])
+  plan         SubscriptionPlan @relation(fields: [planId], references: [id])
+}
+
+// 2. AI MODEL ROUTING & TOKEN MANAGEMENT
+model AIModelConfig {
+  id          String   @id @default(uuid())
+  provider    String   // "openai", "anthropic", "groq", "fashn"
+  modelName   String   // "gpt-4o-mini", "gpt-4o", "llama-3-70b"
+  tier        String   // "FREE", "PAID", "HEAVY"
+  costPer1kInput  Decimal @db.Decimal(10, 6)
+  costPer1kOutput Decimal @db.Decimal(10, 6)
+  isActive    Boolean  @default(true)
+}
+
+model AITokenLog {
+  id          String   @id @default(uuid())
+  modelId     String
+  userId      String?
+  taskType    String   // "STYLIST_CHAT", "TRY_ON", "IMAGE_ANALYSIS"
+  tokensIn    Int
+  tokensOut   Int
+  cost        Decimal  @db.Decimal(10, 6)
+  createdAt   DateTime @default(now())
+}

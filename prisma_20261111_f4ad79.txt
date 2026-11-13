@@ -1,0 +1,7 @@
+model SavedOutfit {
+  id           String   @id @default(uuid())
+  userId       String
+  name         String
+  avatarConfig Json     // Menyimpan data gender, skinColor, clothingColor, productIds
+  createdAt    DateTime @default(now())
+}

@@ -1,0 +1,32 @@
+model Order {
+  id              String   @id @default(uuid())
+  userId          String?  // Nullable jika guest checkout
+  totalAmount     Decimal  @db.Decimal(12, 2)
+  status          OrderStatus @default(PENDING)
+  shippingAddress Json     // Menyimpan nama, alamat, telp
+  midtransOrderId String?  @unique // ID dari Midtrans
+  createdAt       DateTime @default(now())
+
+  items           OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  productId String
+  name      String
+  price     Decimal @db.Decimal(12, 2)
+  quantity  Int
+  size      String
+  color     String
+  
+  order     Order   @relation(fields: [orderId], references: [id])
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  COMPLETED
+  CANCELLED
+}

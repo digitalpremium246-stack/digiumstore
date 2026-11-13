@@ -1,0 +1,22 @@
+// prisma/schema.prisma
+
+model VirtualTryOnJob {
+  id             String   @id @default(uuid())
+  userId         String?  // Nullable jika belum login
+  productId      String
+  userImageUrl   String
+  productImageUrl String
+  status         JobStatus @default(PENDING)
+  resultImageUrl String?
+  errorMessage   String?
+  provider       String   // "demo", "fashn", "replicate"
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+enum JobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}

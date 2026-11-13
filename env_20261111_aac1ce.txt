@@ -1,0 +1,37 @@
+# ==========================================
+# DATABASE (Railway PostgreSQL)
+# ==========================================
+DATABASE_URL="postgresql://user:password@host:port/db"
+
+# ==========================================
+# AUTHENTICATION (NextAuth / Supabase)
+# ==========================================
+NEXTAUTH_SECRET="generate_random_string_here"
+NEXTAUTH_URL="https://yourdomain.com"
+
+# ==========================================
+# AI PROVIDERS (Wajib diisi untuk production)
+# ==========================================
+# Opsional: Jika kosong, akan fallback ke DemoProvider
+FASHN_AI_API_KEY="" 
+OPENAI_API_KEY="sk-..."
+
+# ==========================================
+# STORAGE (Cloudflare R2 / AWS S3)
+# ==========================================
+R2_ACCESS_KEY_ID=""
+R2_SECRET_ACCESS_KEY=""
+R2_BUCKET_NAME="digiumstore-private"
+R2_PUBLIC_URL="https://cdn.yourdomain.com"
+
+# ==========================================
+# PAYMENT GATEWAY (Midtrans Sandbox/Prod)
+# ==========================================
+MIDTRANS_SERVER_KEY="SB-Mid-server-..."
+MIDTRANS_CLIENT_KEY="SB-Mid-client-..."
+
+# ==========================================
+# RATE LIMITING (Upstash Redis via Railway)
+# ==========================================
+UPSTASH_REDIS_REST_URL=""
+UPSTASH_REDIS_REST_TOKEN=""
